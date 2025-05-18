@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tic-Tac-Toe Game</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #1a1a40, #0d7377);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      max-width: 700px;
+      margin: 1rem auto;
+      font-size: 1rem;
+      line-height: 1.6;
+      padding: 0 1rem;
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      gap: 10px;
+      margin: 2rem 0;
+    }
+
+    .cell {
+      width: 100px;
+      height: 100px;
+      font-size: 2.5rem;
+      background-color: #ffffff22;
+      border: 2px solid #00ffff88;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: background 0.3s;
+    }
+
+    .cell:hover {
+      background-color: #00ffff33;
+    }
+
+    #status {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .reset-btn {
+      padding: 0.7rem 1.5rem;
+      background-color: #dc3545;
+      border: none;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+
+    .reset-btn:hover {
+      background-color: #c82333;
+    }
+
+    footer {
+      margin-top: auto;
+      padding: 1rem;
+      font-size: 0.85rem;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Task-03: Tic-Tac-Toe Web Application</h1>
+    <p>
+      To build a tic-tac-toe web application, you can use HTML, CSS, and JavaScript. 
+      By implementing functions to handle user clicks, track game state, and check for winning conditions, 
+      you can create an interactive and engaging game for two players.
+    </p>
+  </header>
+
+  <div id="status">Player X's turn</div>
+  <div class="board" id="board">
+    <div class="cell" data-index="0"></div>
+    <div class="cell" data-index="1"></div>
+    <div class="cell" data-index="2"></div>
+    <div class="cell" data-index="3"></div>
+    <div class="cell" data-index="4"></div>
+    <div class="cell" data-index="5"></div>
+    <div class="cell" data-index="6"></div>
+    <div class="cell" data-index="7"></div>
+    <div class="cell" data-index="8"></div>
+  </div>
+  <button class="reset-btn" onclick="resetGame()">Reset</button>
+
+  <footer>
+    &copy; 2025 Tic-Tac-Toe Game
+  </footer>
+
+  <script>
+    const cells = document.querySelectorAll('.cell');
+    const statusText = document.getElementById('status');
+    let currentPlayer = 'X';
+    let board = ['', '', '', '', '', '', '', '', ''];
+    let gameActive = true;
+
+    const winConditions = [
+      [0,1,2], [3,4,5], [6,7,8], // Rows
+      [0,3,6], [1,4,7], [2,5,8], // Columns
+      [0,4,8], [2,4,6]           // Diagonals
+    ];
+
+    function checkWin() {
+      for (let condition of winConditions) {
+        const [a, b, c] = condition;
+        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+          statusText.textContent = `Player ${board[a]} wins!`;
+          gameActive = false;
+          return;
+        }
+      }
+
+      if (!board.includes('')) {
+        statusText.textContent = 'It\'s a draw!';
+        gameActive = false;
+      }
+    }
+
+    function handleClick(event) {
+      const index = event.target.getAttribute('data-index');
+      if (board[index] !== '' || !gameActive) return;
+
+      board[index] = currentPlayer;
+      event.target.textContent = currentPlayer;
+      checkWin();
+
+      if (gameActive) {
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        statusText.textContent = `Player ${currentPlayer}'s turn`;
+      }
+    }
+
+    function resetGame() {
+      board = ['', '', '', '', '', '', '', '', ''];
+      cells.forEach(cell => cell.textContent = '');
+      currentPlayer = 'X';
+      statusText.textContent = `Player X's turn`;
+      gameActive = true;
+    }
+
+    cells.forEach(cell => cell.addEventListener('click', handleClick));
+  </script>
+
+</body>
+</html>
